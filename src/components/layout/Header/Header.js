@@ -1,11 +1,12 @@
 import React from 'react';
+import clsx from 'clsx';
 
 import styles from './Header.module.scss';
 
 const Header = () => (
-  <div className={styles.container}>
+  <header className={clsx('container-xl', styles.mainHeader)}>
     <h1 className={styles.title}>Dashboard</h1>
-  </div>
+  </header>
 );
 
 export default Header;
