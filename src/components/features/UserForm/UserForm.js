@@ -11,6 +11,7 @@ class UserForm extends React.Component {
   state = {
     email: '',
     name: '',
+    inputValidation: false,
     redirect: false,
   }
 
@@ -43,12 +44,23 @@ class UserForm extends React.Component {
     });
   }
 
-  handleSubmit() {
+  handleInputValidation() {
+    this.setState({
+      ...this.state,
+      inputValidation: true,
+    });
+  }
+
+  async handleSubmit() {
     const {selectedUser, id, AddNewUserAPI} = this.props;
 
     if(id === 'new' || selectedUser.id === undefined) {
-      AddNewUserAPI(uid() ,this.state.email, this.state.name);
-      this.handleRedirectChange();
+      if(this.state.email === '' || this.state.name === '') {
+        this.handleInputValidation();
+      } else {
+        await AddNewUserAPI(uid() ,this.state.email, this.state.name);
+        this.handleRedirectChange();
+      }
     }
   }
 
@@ -71,21 +83,35 @@ class UserForm extends React.Component {
                 <label htmlFor='email' className='form-label'>Email</label>
                 <input 
                   type="email" 
-                  className='form-control' 
+                  className={this.state.inputValidation && this.state.email === '' ? clsx('form-control', styles.inputError) : 'form-control'}
                   id="email"
                   value={this.state.email}
                   onChange={e => this.handleEmailChange(e.target.value)}
                 />
+                {
+                  this.state.inputValidation && this.state.email === '' 
+                    ? 
+                    <p className={styles.errorMessage}>Email is required</p>
+                    :
+                    null
+                }
               </div>
               <div className='mb-2'>
                 <label htmlFor='name' className='form-label'>Name</label>
                 <input 
                   type='text' 
-                  className='form-control' 
+                  className={this.state.inputValidation && this.state.name === '' ? clsx('form-control', styles.inputError) : 'form-control'} 
                   id='name'
                   value={this.state.name}
                   onChange={e => this.handleNameChange(e.currentTarget.value)}
                 />
+                {
+                  this.state.inputValidation && this.state.name === '' 
+                    ? 
+                    <p className={styles.errorMessage}>Name is required</p>
+                    :
+                    null
+                }
               </div>
             </form>
             <div className='row justify-content-end'>
