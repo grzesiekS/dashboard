@@ -3,6 +3,7 @@ import Axios from 'axios';
 /* SELECTORS */
 export const getUsersData = ({users}) => users.usersList === undefined ? [] : users.usersList;
 export const getSelectedUserData = ({users}) => users.user === undefined ? {} : users.user;
+export const getLoadingData = ({users}) => users.loading === undefined ? {} : users.loading;
 
 /* ACTIONS */
 // action name creator

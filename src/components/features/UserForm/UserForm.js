@@ -34,42 +34,49 @@ class UserForm extends React.Component {
   }
 
   render() {
+
+    const {loadingData} = this.props;
+
     return (
-      <section className={clsx('container-xl', styles.userForm)}>
-        <p className={styles.subtitle}>Form</p>
-        <form>
-          <div className='mb-2'>
-            <label htmlFor='email' className='form-label'>Email</label>
-            <input 
-              type="email" 
-              className='form-control' 
-              id="email"
-              value={this.state.email}
-              onChange={e => this.handleEmailChange(e.target.value)}
-            />
+      loadingData.active && loadingData.active === undefined
+        ?
+        null
+        :
+        <section className={clsx('container-xl', styles.userForm)}>
+          <p className={styles.subtitle}>Form</p>
+          <form>
+            <div className='mb-2'>
+              <label htmlFor='email' className='form-label'>Email</label>
+              <input 
+                type="email" 
+                className='form-control' 
+                id="email"
+                value={this.state.email}
+                onChange={e => this.handleEmailChange(e.target.value)}
+              />
+            </div>
+            <div className='mb-2'>
+              <label htmlFor='name' className='form-label'>Name</label>
+              <input 
+                type='text' 
+                className='form-control' 
+                id='name'
+                value={this.state.name}
+                onChange={e => this.handleNameChange(e.currentTarget.value)}
+              />
+            </div>
+          </form>
+          <div className='row justify-content-end'>
+            <div className='col-auto'>
+              <button type='button' className='btn btn-outline-success'>Submit</button>
+            </div>
+            <div className='col-auto'>
+              <Link to='/'>
+                <button type='button' className='btn btn-outline-danger'>Cancel</button>
+              </Link>
+            </div>
           </div>
-          <div className='mb-2'>
-            <label htmlFor='name' className='form-label'>Name</label>
-            <input 
-              type='text' 
-              className='form-control' 
-              id='name'
-              value={this.state.name}
-              onChange={e => this.handleNameChange(e.currentTarget.value)}
-            />
-          </div>
-        </form>
-        <div className='row justify-content-end'>
-          <div className='col-auto'>
-            <button type='button' className='btn btn-outline-success'>Submit</button>
-          </div>
-          <div className='col-auto'>
-            <Link to='/'>
-              <button type='button' className='btn btn-outline-danger'>Cancel</button>
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
     );
   }
 }
@@ -78,6 +85,7 @@ UserForm.propTypes = {
   selectedUser: PropTypes.object,
   fetchUsersSelected: PropTypes.func,
   id: PropTypes.string,
+  loadingData: PropTypes.object,
 };
 
 UserForm.defaultProps = {
