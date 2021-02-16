@@ -16,7 +16,7 @@ class UserList extends React.Component {
 
   render() {
 
-    const {userList} = this.props;
+    const {userList, restoreDefaultUserData} = this.props;
 
     return (
       <section className={clsx('container-xl', styles.userList)}>
@@ -26,7 +26,13 @@ class UserList extends React.Component {
           </div>
           <div className='col text-right'>
             <Link to='/addedit/new' >
-              <button type='button' className='btn btn-primary'>Add new</button>
+              <button 
+                type='button' 
+                className='btn btn-primary'
+                onClick={() => restoreDefaultUserData()}
+              >
+                Add new
+              </button>
             </Link>
           </div>
         </div>
@@ -39,10 +45,12 @@ class UserList extends React.Component {
 UserList.propTypes = {
   fetchUsers: PropTypes.func,
   userList: PropTypes.array,
+  restoreDefaultUserData: PropTypes.func,
 };
 
 UserList.defaultProps = {
   fetchUsers: () => {},
+  restoreDefaultUserData: () => {},
 };
 
 export default UserList;

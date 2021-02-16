@@ -9,8 +9,6 @@ import { Link } from 'react-router-dom';
 
 class UserForm extends React.Component {
   state = {
-    email: '',
-    name: '',
     inputValidation: false,
     redirect: false,
   }
@@ -21,20 +19,6 @@ class UserForm extends React.Component {
     if(id !== 'new') {
       fetchUsersSelected(id);
     }
-  }
-
-  handleEmailChange(newValue) {
-    this.setState({
-      ...this.state,
-      email: newValue,
-    });
-  }
-
-  handleNameChange(newValue) {
-    this.setState({
-      ...this.state,
-      name: newValue,
-    });
   }
 
   handleRedirectChange() {
@@ -69,7 +53,7 @@ class UserForm extends React.Component {
 
   render() {
 
-    const {loadingData} = this.props;
+    const {loadingData, selectedUser, changeUserData} = this.props;
 
     if(this.state.redirect) {
       return (<Redirect to='/' />);
@@ -88,8 +72,8 @@ class UserForm extends React.Component {
                   type="email" 
                   className={this.state.inputValidation && this.state.email === '' ? clsx('form-control', styles.inputError) : 'form-control'}
                   id="email"
-                  value={this.state.email}
-                  onChange={e => this.handleEmailChange(e.target.value)}
+                  value={selectedUser.email || ''}
+                  onChange={e => changeUserData(e.currentTarget.id, e.currentTarget.value)}
                 />
                 {
                   this.state.inputValidation && this.state.email === '' 
@@ -105,8 +89,8 @@ class UserForm extends React.Component {
                   type='text' 
                   className={this.state.inputValidation && this.state.name === '' ? clsx('form-control', styles.inputError) : 'form-control'} 
                   id='name'
-                  value={this.state.name}
-                  onChange={e => this.handleNameChange(e.currentTarget.value)}
+                  value={selectedUser.name || ''}
+                  onChange={e => changeUserData(e.currentTarget.id, e.currentTarget.value)}
                 />
                 {
                   this.state.inputValidation && this.state.name === '' 
@@ -143,11 +127,13 @@ UserForm.propTypes = {
   id: PropTypes.string,
   loadingData: PropTypes.object,
   AddNewUserAPI: PropTypes.func,
+  changeUserData: PropTypes.func,
 };
 
 UserForm.defaultProps = {
   fetchUsersSelected: () => {},
   AddNewUserAPI: () => {},
+  changeUserData: () => {},
 };
 
 export default UserForm;
