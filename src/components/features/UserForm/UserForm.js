@@ -90,16 +90,16 @@ class UserForm extends React.Component {
             </form>
             <div className='row justify-content-end'>
               <div className='col-auto'>
+                <Link to='/'>
+                  <button type='button' className='btn btn-outline-danger'>Cancel</button>
+                </Link>
+              </div>
+              <div className='col-auto'>
                 <button 
                   type='button' 
                   className='btn btn-outline-success'
                   onClick={() => this.handleSubmit()}
                 >Submit</button>
-              </div>
-              <div className='col-auto'>
-                <Link to='/'>
-                  <button type='button' className='btn btn-outline-danger'>Cancel</button>
-                </Link>
               </div>
             </div>
           </section>
