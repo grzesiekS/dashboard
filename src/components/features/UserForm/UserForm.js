@@ -39,7 +39,7 @@ class UserForm extends React.Component {
     const {selectedUser, id, AddNewUserAPI} = this.props;
 
 
-    if(this.state.email === '' || this.state.name === '') {
+    if(selectedUser.email === '' || selectedUser.name === '') {
       this.handleInputValidation();
     } else {
       if(id === 'new' || selectedUser.id === undefined) {
@@ -70,13 +70,13 @@ class UserForm extends React.Component {
                 <label htmlFor='email' className='form-label'>Email</label>
                 <input 
                   type="email" 
-                  className={this.state.inputValidation && this.state.email === '' ? clsx('form-control', styles.inputError) : 'form-control'}
+                  className={this.state.inputValidation && selectedUser.email === '' ? clsx('form-control', styles.inputError) : 'form-control'}
                   id="email"
                   value={selectedUser.email || ''}
                   onChange={e => changeUserData(e.currentTarget.id, e.currentTarget.value)}
                 />
                 {
-                  this.state.inputValidation && this.state.email === '' 
+                  this.state.inputValidation && selectedUser.email === '' 
                     ? 
                     <p className={styles.errorMessage}>Email is required</p>
                     :
@@ -87,13 +87,13 @@ class UserForm extends React.Component {
                 <label htmlFor='name' className='form-label'>Name</label>
                 <input 
                   type='text' 
-                  className={this.state.inputValidation && this.state.name === '' ? clsx('form-control', styles.inputError) : 'form-control'} 
+                  className={this.state.inputValidation && selectedUser.name === '' ? clsx('form-control', styles.inputError) : 'form-control'} 
                   id='name'
                   value={selectedUser.name || ''}
                   onChange={e => changeUserData(e.currentTarget.id, e.currentTarget.value)}
                 />
                 {
-                  this.state.inputValidation && this.state.name === '' 
+                  this.state.inputValidation && selectedUser.name === '' 
                     ? 
                     <p className={styles.errorMessage}>Name is required</p>
                     :
