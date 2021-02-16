@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './UserList.module.scss';
 
 import UserData from '../UserData/UserData';
+import { Link } from 'react-router-dom';
 
 class UserList extends React.Component {
 
@@ -25,7 +26,9 @@ class UserList extends React.Component {
             <p className={styles.subtitle}>User List</p>
           </div>
           <div className='col text-right'>
-            <button type='button' className='btn btn-primary'>Add new</button>
+            <Link to='/addedit/new'>
+              <button type='button' className='btn btn-primary'>Add new</button>
+            </Link>
           </div>
         </div>
         <UserData userList={userList} />

@@ -8,6 +8,7 @@ import './styles/bootstrap.scss';
 
 import MainLayout from './components/layout/MainLayout/MainLayout';
 import Homepage from './components/views/Homepage/Homepage';
+import AddEditPage from './components/views/AddEditPage/AddEditPage';
 
 const App = () => (
   <Provider store={store}>
@@ -15,6 +16,7 @@ const App = () => (
       <MainLayout>
         <Switch>
           <Route exact path={'/'} component={Homepage} />
+          <Route exact path={'/addedit/:id'} component={AddEditPage} />
         </Switch>
       </MainLayout>
     </BrowserRouter>

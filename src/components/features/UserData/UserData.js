@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const UserData = ({userList}) => (
   <div>
@@ -21,7 +22,11 @@ const UserData = ({userList}) => (
             <td>{user.username}</td>
             <td>{user.address.city}</td>
             <td>{user.email}</td>
-            <td><button type='button' className='btn btn-warning'>Edit</button></td>
+            <td>
+              <Link to={`/addedit/${user.id}`}>
+                <button type='button' className='btn btn-warning'>Edit</button>
+              </Link>
+            </td>
             <td><button type='button' className='btn btn-danger'>Delete</button></td>
           </tr>
         ))}
