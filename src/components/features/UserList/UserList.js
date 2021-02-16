@@ -7,7 +7,7 @@ class UserList extends React.Component {
   render() {
     return (
       <section className={clsx('container-xl', styles.userList)}>
-        <div className='row justify-content-between'>
+        <div className='row justify-content-between align-items-center'>
           <div className='col'>
             <p className={styles.subtitle}>User List</p>
           </div>
