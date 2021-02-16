@@ -56,6 +56,7 @@ export const fetchUsersSelected = id => {
       })
       .catch(err => {
         dispatch(fetchError(err.message || false));
+        dispatch(restoreDefaultUserData());
       });
   };
 };
