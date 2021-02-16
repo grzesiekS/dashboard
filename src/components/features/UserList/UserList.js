@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import styles from './UserList.module.scss';
 
+import UserData from '../UserData/UserData';
+
 class UserList extends React.Component {
 
   componentDidMount() {
@@ -13,6 +15,9 @@ class UserList extends React.Component {
   }
 
   render() {
+
+    const {userList} = this.props;
+
     return (
       <section className={clsx('container-xl', styles.userList)}>
         <div className='row justify-content-between align-items-center'>
@@ -23,6 +28,7 @@ class UserList extends React.Component {
             <button type='button' className='btn btn-primary'>Add new</button>
           </div>
         </div>
+        <UserData userList={userList} />
       </section>
     );
   }
@@ -30,6 +36,7 @@ class UserList extends React.Component {
 
 UserList.propTypes = {
   fetchUsers: PropTypes.func,
+  userList: PropTypes.array,
 };
 
 UserList.defaultProps = {
