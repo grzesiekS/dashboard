@@ -1,6 +1,6 @@
 import React from 'react';
 
-import UserList from '../../features/UserList/UserList';
+import UserList from '../../features/UserList/UserListContainer';
 
 const Homepage = () => (
   <UserList />

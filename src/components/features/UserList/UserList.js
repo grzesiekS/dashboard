@@ -1,9 +1,17 @@
 import React from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 
 import styles from './UserList.module.scss';
 
 class UserList extends React.Component {
+
+  componentDidMount() {
+    const {fetchUsers} = this.props;
+
+    fetchUsers();
+  }
+
   render() {
     return (
       <section className={clsx('container-xl', styles.userList)}>
@@ -19,5 +27,13 @@ class UserList extends React.Component {
     );
   }
 }
+
+UserList.propTypes = {
+  fetchUsers: PropTypes.func,
+};
+
+UserList.defaultProps = {
+  fetchUsers: () => {},
+};
 
 export default UserList;
