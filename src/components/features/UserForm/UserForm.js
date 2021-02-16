@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 class UserForm extends React.Component {
   render() {
     return (
-      <div className={clsx('container-xl', styles.userForm)}>
+      <section className={clsx('container-xl', styles.userForm)}>
         <p className={styles.subtitle}>Form</p>
         <form>
           <div className='mb-2'>
@@ -29,7 +29,7 @@ class UserForm extends React.Component {
             </Link>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }
