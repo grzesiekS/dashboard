@@ -15,7 +15,7 @@ class UserForm extends React.Component {
     redirect: false,
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {fetchUsersSelected, id} = this.props;
 
     if(id !== 'new') {
@@ -54,14 +54,17 @@ class UserForm extends React.Component {
   async handleSubmit() {
     const {selectedUser, id, AddNewUserAPI} = this.props;
 
-    if(id === 'new' || selectedUser.id === undefined) {
-      if(this.state.email === '' || this.state.name === '') {
-        this.handleInputValidation();
-      } else {
+
+    if(this.state.email === '' || this.state.name === '') {
+      this.handleInputValidation();
+    } else {
+      if(id === 'new' || selectedUser.id === undefined) {
         await AddNewUserAPI(uid() ,this.state.email, this.state.name);
         this.handleRedirectChange();
+      } else if (selectedUser.id.toString() === id) {
+        console.log('test');
       }
-    }
+    }  
   }
 
   render() {
