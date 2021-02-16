@@ -20,7 +20,7 @@ const UserData = ({userList}) => (
             <th scope='row'>{user.id}</th>
             <td>{user.name}</td>
             <td>{user.username}</td>
-            <td>{user.address.city}</td>
+            <td>{user.address === undefined ? '' : user.address.city}</td>
             <td>{user.email}</td>
             <td>
               <Link to={`/addedit/${user.id}`}>

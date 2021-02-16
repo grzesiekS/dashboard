@@ -10,9 +10,8 @@ import { Link } from 'react-router-dom';
 class UserList extends React.Component {
 
   componentDidMount() {
-    const {fetchUsers} = this.props;
-
-    fetchUsers();
+    const {fetchUsers, userList} = this.props;
+    if(userList.length === 0) fetchUsers();
   }
 
   render() {

@@ -15,12 +15,14 @@ const FETCH_START = createActionName('FETCH_START');
 const FETCH_SUCESS_ALL = createActionName('FETCH_SUCESS_ALL');
 const FETCH_SUCESS_SELECTED = createActionName('FETCH_SUCESS_SELECTED');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
+const ADD_NEW_USER = createActionName('ADD_NEW_USER');
 
 // action creators
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccessAll = payload => ({ payload, type: FETCH_SUCESS_ALL });
 export const fetchSuccessSelected = payload => ({ payload, type: FETCH_SUCESS_SELECTED });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
+export const addNewUser = payload => ({ payload, type: ADD_NEW_USER });
 
 /* thunk creators */
 
@@ -51,6 +53,18 @@ export const fetchUsersSelected = id => {
       .catch(err => {
         dispatch(fetchError(err.message || false));
       });
+  };
+};
+
+export const AddNewUserAPI = post => {
+  return async dispatch => {
+    try {
+      await Axios.post('https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data', post);
+      await new Promise((resolve) => resolve());
+      dispatch(addNewUser(post));
+    } catch(err) {
+      dispatch(fetchError(err.message || false));
+    }
   };
 };
 
@@ -93,6 +107,19 @@ export default function reducer(statePart = [], action = {}) {
           active: false,
           error: action.payload,
         },
+      };
+    }
+    case ADD_NEW_USER: {
+      return {
+        ...statePart,
+        usersList: [
+          ...statePart.usersList,
+          {
+            id: action.payload.id,
+            email: action.payload.email,
+            name: action.payload.name,
+          },
+        ],
       };
     }
     default:
