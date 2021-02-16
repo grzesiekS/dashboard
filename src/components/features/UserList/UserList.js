@@ -26,7 +26,7 @@ class UserList extends React.Component {
             <p className={styles.subtitle}>User List</p>
           </div>
           <div className='col text-right'>
-            <Link to='/addedit/new'>
+            <Link to='/addedit/new' >
               <button type='button' className='btn btn-primary'>Add new</button>
             </Link>
           </div>

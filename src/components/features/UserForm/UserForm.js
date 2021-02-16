@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 
 import styles from './UserForm.module.scss';
 import { Link } from 'react-router-dom';
@@ -8,6 +9,14 @@ class UserForm extends React.Component {
   state = {
     email: '',
     name: '',
+  }
+
+  componentDidMount() {
+    const {fetchUsersSelected, id} = this.props;
+
+    if(id !== 'new') {
+      fetchUsersSelected(id);
+    }
   }
 
   handleEmailChange(newValue) {
@@ -64,5 +73,15 @@ class UserForm extends React.Component {
     );
   }
 }
+
+UserForm.propTypes = {
+  selectedUser: PropTypes.object,
+  fetchUsersSelected: PropTypes.func,
+  id: PropTypes.string,
+};
+
+UserForm.defaultProps = {
+  fetchUsersSelected: () => {},
+};
 
 export default UserForm;
