@@ -1,7 +1,9 @@
 import React from 'react';
 
+import UserForm from '../../features/UserForm/UserForm';
+
 const AddEditPage = () => (
-  <h1>Add edit page</h1>
+  <UserForm />
 );
 
 export default AddEditPage;
