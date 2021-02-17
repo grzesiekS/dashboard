@@ -292,7 +292,7 @@ export default function reducer(statePart = [], action = {}) {
     case DELETE_ERROR: {
       return {
         ...statePart,
-        put: {
+        delete: {
           active: false,
           error: action.payload,
         },
