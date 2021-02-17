@@ -15,20 +15,34 @@ const FETCH_START = createActionName('FETCH_START');
 const FETCH_SUCESS_ALL = createActionName('FETCH_SUCESS_ALL');
 const FETCH_SUCESS_SELECTED = createActionName('FETCH_SUCESS_SELECTED');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
-const ADD_NEW_USER = createActionName('ADD_NEW_USER');
+
+const POST_START = createActionName('POST_START');
+const POST_SUCESS = createActionName('POST_SUCESS');
+const POST_ERROR = createActionName('POST_ERROR');
+
+const PUT_START = createActionName('PUT_START');
+const PUT_SUCESS = createActionName('PUT_SUCESS');
+const PUT_ERROR = createActionName('PUT_ERROR');
+
 const CHANGE_USER_DATA = createActionName('CHANGE_USER_DATA');
 const DEFAULT_USER_DATA = createActionName('DEFAULT_USER_DATA');
-const UPDATE_USER = createActionName('UPDATE_USER');
 
 // action creators
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccessAll = payload => ({ payload, type: FETCH_SUCESS_ALL });
 export const fetchSuccessSelected = payload => ({ payload, type: FETCH_SUCESS_SELECTED });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
-export const addNewUser = payload => ({ payload, type: ADD_NEW_USER });
+
+export const postStarted = payload => ({ payload, type: POST_START });
+export const postSuccess = payload => ({ payload, type: POST_SUCESS });
+export const postError = payload => ({ payload, type: POST_ERROR });
+
+export const putStarted = payload => ({ payload, type: PUT_START });
+export const putSuccess = payload => ({ payload, type: PUT_SUCESS });
+export const putError = payload => ({ payload, type: PUT_ERROR });
+
 export const changeUserData = payload => ({ payload, type: CHANGE_USER_DATA });
 export const restoreDefaultUserData = () => ({ type: DEFAULT_USER_DATA });
-export const updateUser = payload => ({ payload, type: UPDATE_USER });
 
 /* thunk creators */
 
@@ -65,24 +79,28 @@ export const fetchUsersSelected = id => {
 
 export const AddNewUserAPI = post => {
   return async dispatch => {
+    dispatch(postStarted());
+
     try {
       await Axios.post('https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data', post);
       await new Promise((resolve) => resolve());
-      dispatch(addNewUser(post));
+      dispatch(postSuccess(post));
     } catch(err) {
-      dispatch(fetchError(err.message || false));
+      dispatch(postError(err.message || false));
     }
   };
 };
 
 export const UpdateUserAPI = put => {
   return async dispatch => {
+    dispatch(putStarted());
+
     try {
       await Axios.put(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${put.id}`, put);
       await new Promise((resolve) => resolve());
-      dispatch(updateUser(put));
+      dispatch(putSuccess(put));
     } catch(err) {
-      dispatch(fetchError(err.message || false));
+      dispatch(putError(err.message || false));
     }
   };
 };
@@ -137,9 +155,22 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case ADD_NEW_USER: {
+    case POST_START: {
       return {
         ...statePart,
+        post: {
+          active: true,
+          error: false,
+        },
+      };
+    }
+    case POST_SUCESS: {
+      return {
+        ...statePart,
+        post: {
+          active: false,
+          error: false,
+        },
         usersList: [
           ...statePart.usersList,
           {
@@ -148,6 +179,15 @@ export default function reducer(statePart = [], action = {}) {
             name: action.payload.name,
           },
         ],
+      };
+    }
+    case POST_ERROR: {
+      return {
+        ...statePart,
+        post: {
+          active: false,
+          error: action.payload,
+        },
       };
     }
     case CHANGE_USER_DATA: {
@@ -174,7 +214,16 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case UPDATE_USER: {
+    case PUT_START: {
+      return {
+        ...statePart,
+        put: {
+          active: true,
+          error: false,
+        },
+      };
+    }
+    case PUT_SUCESS: {
       return {
         ...statePart,
         usersList: statePart.usersList.map(user => {
@@ -188,6 +237,15 @@ export default function reducer(statePart = [], action = {}) {
             return user;
           }
         }),
+      };
+    }
+    case PUT_ERROR: {
+      return {
+        ...statePart,
+        put: {
+          active: false,
+          error: action.payload,
+        },
       };
     }
     default:
