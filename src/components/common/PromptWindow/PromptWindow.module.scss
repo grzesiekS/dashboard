@@ -1,0 +1,28 @@
+.promptWindow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 55px;
+  border: 2px solid black;
+  background-color: white;
+
+  &::after {
+    display: block;
+    position: absolute;
+    content: '';
+    width: 200vw;
+    height: 200vh;
+    left: -100vw;
+    top: -100vh;
+    z-index: -100;
+    opacity: 0.5;
+    background-color: black;
+  }
+}
+
+.promptTitle {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+}

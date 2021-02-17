@@ -12,23 +12,45 @@ const createActionName = name => `app/${reducerName}/${name}`;
 
 // action types
 const FETCH_START = createActionName('FETCH_START');
-const FETCH_SUCESS_ALL = createActionName('FETCH_SUCESS_ALL');
-const FETCH_SUCESS_SELECTED = createActionName('FETCH_SUCESS_SELECTED');
+const FETCH_SUCCESS_ALL = createActionName('FETCH_SUCCESS_ALL');
+const FETCH_SUCCESS_SELECTED = createActionName('FETCH_SUCCESS_SELECTED');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
-const ADD_NEW_USER = createActionName('ADD_NEW_USER');
+
+const POST_START = createActionName('POST_START');
+const POST_SUCCESS = createActionName('POST_SUCCESS');
+const POST_ERROR = createActionName('POST_ERROR');
+
+const PUT_START = createActionName('PUT_START');
+const PUT_SUCCESS = createActionName('PUT_SUCCESS');
+const PUT_ERROR = createActionName('PUT_ERROR');
+
+const DELETE_START = createActionName('DELETE_START');
+const DELETE_SUCCESS = createActionName('DELETE_SUCCESS');
+const DELETE_ERROR = createActionName('DELETE_ERROR');
+
 const CHANGE_USER_DATA = createActionName('CHANGE_USER_DATA');
 const DEFAULT_USER_DATA = createActionName('DEFAULT_USER_DATA');
-const UPDATE_USER = createActionName('UPDATE_USER');
 
 // action creators
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
-export const fetchSuccessAll = payload => ({ payload, type: FETCH_SUCESS_ALL });
-export const fetchSuccessSelected = payload => ({ payload, type: FETCH_SUCESS_SELECTED });
+export const fetchSuccessAll = payload => ({ payload, type: FETCH_SUCCESS_ALL });
+export const fetchSuccessSelected = payload => ({ payload, type: FETCH_SUCCESS_SELECTED });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
-export const addNewUser = payload => ({ payload, type: ADD_NEW_USER });
+
+export const postStarted = payload => ({ payload, type: POST_START });
+export const postSuccess = payload => ({ payload, type: POST_SUCCESS });
+export const postError = payload => ({ payload, type: POST_ERROR });
+
+export const putStarted = payload => ({ payload, type: PUT_START });
+export const putSuccess = payload => ({ payload, type: PUT_SUCCESS });
+export const putError = payload => ({ payload, type: PUT_ERROR });
+
+export const deleteStarted = payload => ({ payload, type: DELETE_START });
+export const deleteSuccess = payload => ({ payload, type: DELETE_SUCCESS });
+export const deleteError = payload => ({ payload, type: DELETE_ERROR });
+
 export const changeUserData = payload => ({ payload, type: CHANGE_USER_DATA });
 export const restoreDefaultUserData = () => ({ type: DEFAULT_USER_DATA });
-export const updateUser = payload => ({ payload, type: UPDATE_USER });
 
 /* thunk creators */
 
@@ -42,7 +64,7 @@ export const fetchUsers = () => {
         dispatch(fetchSuccessAll(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || false));
+        dispatch(fetchError(err.message || true));
       });
   };
 };
@@ -57,7 +79,7 @@ export const fetchUsersSelected = id => {
         dispatch(fetchSuccessSelected(res.data));
       })
       .catch(err => {
-        dispatch(fetchError(err.message || false));
+        dispatch(fetchError(err.message || true));
         dispatch(restoreDefaultUserData());
       });
   };
@@ -65,24 +87,42 @@ export const fetchUsersSelected = id => {
 
 export const AddNewUserAPI = post => {
   return async dispatch => {
+    dispatch(postStarted());
+
     try {
       await Axios.post('https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data', post);
       await new Promise((resolve) => resolve());
-      dispatch(addNewUser(post));
+      dispatch(postSuccess(post));
     } catch(err) {
-      dispatch(fetchError(err.message || false));
+      dispatch(postError(err.message || true));
     }
   };
 };
 
 export const UpdateUserAPI = put => {
   return async dispatch => {
+    dispatch(putStarted());
+
     try {
       await Axios.put(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${put.id}`, put);
       await new Promise((resolve) => resolve());
-      dispatch(updateUser(put));
+      dispatch(putSuccess(put));
     } catch(err) {
-      dispatch(fetchError(err.message || false));
+      dispatch(putError(err.message || true));
+    }
+  };
+};
+
+export const deleteUserAPI = id => {
+  return async dispatch => {
+    dispatch(deleteStarted());
+
+    try {
+      await Axios.delete(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${id}`);
+      await new Promise((resolve) => resolve());
+      dispatch(deleteSuccess(id));
+    } catch(err) {
+      dispatch(deleteError(err.message || true));
     }
   };
 };
@@ -99,7 +139,7 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case FETCH_SUCESS_ALL: {
+    case FETCH_SUCCESS_ALL: {
       return {
         ...statePart,
         loading: {
@@ -114,7 +154,7 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case FETCH_SUCESS_SELECTED: {
+    case FETCH_SUCCESS_SELECTED: {
       return {
         ...statePart,
         loading: {
@@ -137,9 +177,22 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case ADD_NEW_USER: {
+    case POST_START: {
       return {
         ...statePart,
+        post: {
+          active: true,
+          error: false,
+        },
+      };
+    }
+    case POST_SUCCESS: {
+      return {
+        ...statePart,
+        post: {
+          active: false,
+          error: false,
+        },
         usersList: [
           ...statePart.usersList,
           {
@@ -148,6 +201,15 @@ export default function reducer(statePart = [], action = {}) {
             name: action.payload.name,
           },
         ],
+      };
+    }
+    case POST_ERROR: {
+      return {
+        ...statePart,
+        post: {
+          active: false,
+          error: action.payload,
+        },
       };
     }
     case CHANGE_USER_DATA: {
@@ -174,7 +236,16 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case UPDATE_USER: {
+    case PUT_START: {
+      return {
+        ...statePart,
+        put: {
+          active: true,
+          error: false,
+        },
+      };
+    }
+    case PUT_SUCCESS: {
       return {
         ...statePart,
         usersList: statePart.usersList.map(user => {
@@ -188,6 +259,43 @@ export default function reducer(statePart = [], action = {}) {
             return user;
           }
         }),
+      };
+    }
+    case PUT_ERROR: {
+      return {
+        ...statePart,
+        put: {
+          active: false,
+          error: action.payload,
+        },
+      };
+    }
+    case DELETE_START: {
+      return {
+        ...statePart,
+        delete: {
+          active: true,
+          error: false,
+        },
+      };
+    }
+    case DELETE_SUCCESS: {
+      return {
+        ...statePart,
+        delete: {
+          active: false,
+          error: false,
+        },
+        usersList: statePart.usersList.filter(user => user.id !== action.payload),
+      };
+    }
+    case DELETE_ERROR: {
+      return {
+        ...statePart,
+        delete: {
+          active: false,
+          error: action.payload,
+        },
       };
     }
     default:
