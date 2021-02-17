@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styles from './UserData.module.scss';
 import PromptWindow from '../../common/PromptWindow/PromptWindow';
 
-const UserData = ({userList, deleteUser}) => {
+const UserData = ({userList, deleteUser, deleteUserLocal}) => {
 
   const [promptWindowVisible, setVisible] = useState(false);
   const [id, setId] = useState(0);
@@ -24,6 +24,8 @@ const UserData = ({userList, deleteUser}) => {
   const handleDeleteUser = () => {
     deleteUser(id);
     setVisible(false);
+    /* Only to handle local data because of the test API */
+    deleteUserLocal(id);
   };
 
   const closePromptWindow = () => {
@@ -112,6 +114,7 @@ const UserData = ({userList, deleteUser}) => {
 UserData.propTypes = {
   userList: PropTypes.array,
   deleteUser: PropTypes.func,
+  deleteUserLocal: PropTypes.func,
 };
 
 export default UserData;

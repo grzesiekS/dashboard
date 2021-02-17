@@ -16,7 +16,7 @@ class UserList extends React.Component {
 
   render() {
 
-    const {userList, restoreDefaultUserData, deleteUser} = this.props;
+    const {userList, restoreDefaultUserData, deleteUser, deleteSuccess} = this.props;
 
     return (
       <section className={clsx('container-xl', styles.userList)}>
@@ -36,7 +36,7 @@ class UserList extends React.Component {
             </Link>
           </div>
         </div>
-        <UserData userList={userList} deleteUser={deleteUser} />
+        <UserData userList={userList} deleteUser={deleteUser} deleteUserLocal={deleteSuccess} />
       </section>
     );
   }
@@ -47,12 +47,14 @@ UserList.propTypes = {
   userList: PropTypes.array,
   restoreDefaultUserData: PropTypes.func,
   deleteUser: PropTypes.func,
+  deleteSuccess: PropTypes.func,
 };
 
 UserList.defaultProps = {
   fetchUsers: () => {},
   restoreDefaultUserData: () => {},
   deleteUser: () => {},
+  deleteSuccess: () => {},
 };
 
 export default UserList;

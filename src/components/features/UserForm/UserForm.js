@@ -14,10 +14,12 @@ class UserForm extends React.Component {
   }
 
   async componentDidMount() {
-    const {fetchUsersSelected, id} = this.props;
+    const {fetchUsersSelected, id, getSelectedUserLocal, fetchSuccessSelected} = this.props;
 
     if(id !== 'new') {
       fetchUsersSelected(id);
+      /* Only to handle local data because of the test API */
+      fetchSuccessSelected(getSelectedUserLocal.id, getSelectedUserLocal.name, getSelectedUserLocal.email);
     }
   }
 
@@ -36,7 +38,7 @@ class UserForm extends React.Component {
   }
 
   async handleSubmit() {
-    const {selectedUser, id, AddNewUserAPI, UpdateUserAPI} = this.props;
+    const {selectedUser, id, AddNewUserAPI, UpdateUserAPI, putSuccess} = this.props;
 
 
     if(selectedUser.email === '' || selectedUser.name === '') {
@@ -47,6 +49,8 @@ class UserForm extends React.Component {
         this.handleRedirectChange();
       } else if (selectedUser.id.toString() === id) {
         UpdateUserAPI(selectedUser.id, selectedUser.email, selectedUser.name);
+        /* Only to handle local data because of the test API */
+        putSuccess(selectedUser.id, selectedUser.email, selectedUser.name);
         this.handleRedirectChange();
       }
     }  
@@ -137,6 +141,9 @@ UserForm.propTypes = {
   changeUserData: PropTypes.func,
   UpdateUserAPI: PropTypes.func,
   restoreDefaultUserData: PropTypes.func,
+  getSelectedUserLocal: PropTypes.object,
+  fetchSuccessSelected: PropTypes.func,
+  putSuccess: PropTypes.func,
 };
 
 UserForm.defaultProps = {
@@ -145,6 +152,8 @@ UserForm.defaultProps = {
   changeUserData: () => {},
   UpdateUserAPI: () => {},
   restoreDefaultUserData: () => {},
+  fetchSuccessSelected: () => {},
+  putSuccess: () => {},
 };
 
 export default UserForm;
