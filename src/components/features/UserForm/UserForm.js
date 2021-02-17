@@ -54,7 +54,7 @@ class UserForm extends React.Component {
 
   render() {
 
-    const {loadingData, selectedUser, changeUserData} = this.props;
+    const {loadingData, selectedUser, changeUserData, restoreDefaultUserData} = this.props;
 
     if(this.state.redirect) {
       return (<Redirect to='/' />);
@@ -105,7 +105,13 @@ class UserForm extends React.Component {
             <div className='row justify-content-end'>
               <div className='col-auto'>
                 <Link to='/'>
-                  <button type='button' className='btn btn-outline-danger'>Cancel</button>
+                  <button 
+                    type='button' 
+                    className='btn btn-outline-danger'
+                    onClick={() => restoreDefaultUserData()}
+                  >
+                    Cancel
+                  </button>
                 </Link>
               </div>
               <div className='col-auto'>
@@ -130,6 +136,7 @@ UserForm.propTypes = {
   AddNewUserAPI: PropTypes.func,
   changeUserData: PropTypes.func,
   UpdateUserAPI: PropTypes.func,
+  restoreDefaultUserData: PropTypes.func,
 };
 
 UserForm.defaultProps = {
@@ -137,6 +144,7 @@ UserForm.defaultProps = {
   AddNewUserAPI: () => {},
   changeUserData: () => {},
   UpdateUserAPI: () => {},
+  restoreDefaultUserData: () => {},
 };
 
 export default UserForm;

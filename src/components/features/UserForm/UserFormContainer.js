@@ -6,6 +6,7 @@ import { getSelectedUserData,
   AddNewUserAPI,
   UpdateUserAPI,
   changeUserData,
+  restoreDefaultUserData,
   getLoadingData } from '../../../redux/usersRedux';
 
 const mapStateToProps = (state) => ({
@@ -18,6 +19,7 @@ const mapDispatchToProps = dispatch => ({
   AddNewUserAPI: (id, email, name) => dispatch(AddNewUserAPI({id, email, name})),
   changeUserData: (type, value) => dispatch(changeUserData({type, value})),
   UpdateUserAPI: (id, email, name) => dispatch(UpdateUserAPI({id, email, name})),
+  restoreDefaultUserData: () => dispatch(restoreDefaultUserData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserForm);
