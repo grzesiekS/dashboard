@@ -43,7 +43,7 @@ class UserForm extends React.Component {
       this.handleInputValidation();
     } else {
       if(id === 'new' || selectedUser.id === undefined) {
-        await AddNewUserAPI(uid() ,this.state.email, this.state.name);
+        await AddNewUserAPI(uid() ,selectedUser.email, selectedUser.name);
         this.handleRedirectChange();
       } else if (selectedUser.id.toString() === id) {
         console.log('test');
