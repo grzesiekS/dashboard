@@ -1,0 +1,26 @@
+.userForm {
+  margin-top: 55px;
+  border: 1px solid black;
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 5px 5px 22px -4px rgba(0,0,0,0.94);
+
+  form {
+    margin-left: 40%;
+  }
+}
+
+.subtitle {
+  font-weight: 700;
+  font-size: 22px;
+  margin: 0;
+}
+
+.inputError {
+  border: 1px solid red;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 12px;
+}

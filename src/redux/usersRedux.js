@@ -2,6 +2,8 @@ import Axios from 'axios';
 
 /* SELECTORS */
 export const getUsersData = ({users}) => users.usersList === undefined ? [] : users.usersList;
+export const getSelectedUserData = ({users}) => users.userData === undefined ? {} : users.userData;
+export const getLoadingData = ({users}) => users.loading === undefined ? {} : users.loading;
 
 /* ACTIONS */
 // action name creator
@@ -10,13 +12,23 @@ const createActionName = name => `app/${reducerName}/${name}`;
 
 // action types
 const FETCH_START = createActionName('FETCH_START');
-const FETCH_SUCESS = createActionName('FETCH_SUCESS');
+const FETCH_SUCESS_ALL = createActionName('FETCH_SUCESS_ALL');
+const FETCH_SUCESS_SELECTED = createActionName('FETCH_SUCESS_SELECTED');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
+const ADD_NEW_USER = createActionName('ADD_NEW_USER');
+const CHANGE_USER_DATA = createActionName('CHANGE_USER_DATA');
+const DEFAULT_USER_DATA = createActionName('DEFAULT_USER_DATA');
+const UPDATE_USER = createActionName('UPDATE_USER');
 
 // action creators
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
-export const fetchSuccess = payload => ({ payload, type: FETCH_SUCESS });
+export const fetchSuccessAll = payload => ({ payload, type: FETCH_SUCESS_ALL });
+export const fetchSuccessSelected = payload => ({ payload, type: FETCH_SUCESS_SELECTED });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
+export const addNewUser = payload => ({ payload, type: ADD_NEW_USER });
+export const changeUserData = payload => ({ payload, type: CHANGE_USER_DATA });
+export const restoreDefaultUserData = () => ({ type: DEFAULT_USER_DATA });
+export const updateUser = payload => ({ payload, type: UPDATE_USER });
 
 /* thunk creators */
 
@@ -27,11 +39,51 @@ export const fetchUsers = () => {
     Axios
       .get('https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data')
       .then(res => {
-        dispatch(fetchSuccess(res.data));
+        dispatch(fetchSuccessAll(res.data));
       })
       .catch(err => {
         dispatch(fetchError(err.message || false));
       });
+  };
+};
+
+export const fetchUsersSelected = id => {
+  return dispatch => {
+    dispatch(fetchStarted());
+
+    Axios
+      .get(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${id}`)
+      .then(res => {
+        dispatch(fetchSuccessSelected(res.data));
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message || false));
+        dispatch(restoreDefaultUserData());
+      });
+  };
+};
+
+export const AddNewUserAPI = post => {
+  return async dispatch => {
+    try {
+      await Axios.post('https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data', post);
+      await new Promise((resolve) => resolve());
+      dispatch(addNewUser(post));
+    } catch(err) {
+      dispatch(fetchError(err.message || false));
+    }
+  };
+};
+
+export const UpdateUserAPI = put => {
+  return async dispatch => {
+    try {
+      await Axios.put(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${put.id}`, put);
+      await new Promise((resolve) => resolve());
+      dispatch(updateUser(put));
+    } catch(err) {
+      dispatch(fetchError(err.message || false));
+    }
   };
 };
 
@@ -47,7 +99,7 @@ export default function reducer(statePart = [], action = {}) {
         },
       };
     }
-    case FETCH_SUCESS: {
+    case FETCH_SUCESS_ALL: {
       return {
         ...statePart,
         loading: {
@@ -55,6 +107,25 @@ export default function reducer(statePart = [], action = {}) {
           error: false,
         },
         usersList: action.payload,
+        userData: {
+          id: 'new',
+          name: '',
+          email: '',
+        },
+      };
+    }
+    case FETCH_SUCESS_SELECTED: {
+      return {
+        ...statePart,
+        loading: {
+          active: false,
+          error: false,
+        },
+        userData: {
+          id: action.payload.id,
+          name: action.payload.name,
+          email: action.payload.email,
+        },
       };
     }
     case FETCH_ERROR: {
@@ -64,6 +135,59 @@ export default function reducer(statePart = [], action = {}) {
           active: false,
           error: action.payload,
         },
+      };
+    }
+    case ADD_NEW_USER: {
+      return {
+        ...statePart,
+        usersList: [
+          ...statePart.usersList,
+          {
+            id: action.payload.id,
+            email: action.payload.email,
+            name: action.payload.name,
+          },
+        ],
+      };
+    }
+    case CHANGE_USER_DATA: {
+      const newData = {};
+      for (const data in statePart.userData) {
+        if(data === action.payload.type) {
+          newData[data] = action.payload.value;
+        } else {
+          newData[data] = statePart.userData[data];
+        }
+      }
+      return {
+        ...statePart,
+        userData: newData,
+      };
+    }
+    case DEFAULT_USER_DATA: {
+      return {
+        ...statePart,
+        userData: {
+          id: 'new',
+          name: '',
+          email: '',
+        },
+      };
+    }
+    case UPDATE_USER: {
+      return {
+        ...statePart,
+        usersList: statePart.usersList.map(user => {
+          if(user.id === action.payload.id) {
+            return {
+              ...user,
+              name: action.payload.name,
+              email: action.payload.email,
+            };
+          } else {
+            return user;
+          }
+        }),
       };
     }
     default:

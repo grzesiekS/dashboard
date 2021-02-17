@@ -5,18 +5,18 @@ import PropTypes from 'prop-types';
 import styles from './UserList.module.scss';
 
 import UserData from '../UserData/UserData';
+import { Link } from 'react-router-dom';
 
 class UserList extends React.Component {
 
   componentDidMount() {
-    const {fetchUsers} = this.props;
-
-    fetchUsers();
+    const {fetchUsers, userList} = this.props;
+    if(userList.length === 0) fetchUsers();
   }
 
   render() {
 
-    const {userList} = this.props;
+    const {userList, restoreDefaultUserData} = this.props;
 
     return (
       <section className={clsx('container-xl', styles.userList)}>
@@ -25,7 +25,15 @@ class UserList extends React.Component {
             <p className={styles.subtitle}>User List</p>
           </div>
           <div className='col text-right'>
-            <button type='button' className='btn btn-primary'>Add new</button>
+            <Link to='/addedit/new' >
+              <button 
+                type='button' 
+                className='btn btn-primary'
+                onClick={() => restoreDefaultUserData()}
+              >
+                Add new
+              </button>
+            </Link>
           </div>
         </div>
         <UserData userList={userList} />
@@ -37,10 +45,12 @@ class UserList extends React.Component {
 UserList.propTypes = {
   fetchUsers: PropTypes.func,
   userList: PropTypes.array,
+  restoreDefaultUserData: PropTypes.func,
 };
 
 UserList.defaultProps = {
   fetchUsers: () => {},
+  restoreDefaultUserData: () => {},
 };
 
 export default UserList;
