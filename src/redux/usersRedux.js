@@ -18,6 +18,7 @@ const FETCH_ERROR = createActionName('FETCH_ERROR');
 const ADD_NEW_USER = createActionName('ADD_NEW_USER');
 const CHANGE_USER_DATA = createActionName('CHANGE_USER_DATA');
 const DEFAULT_USER_DATA = createActionName('DEFAULT_USER_DATA');
+const UPDATE_USER = createActionName('UPDATE_USER');
 
 // action creators
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
@@ -27,6 +28,7 @@ export const fetchError = payload => ({ payload, type: FETCH_ERROR });
 export const addNewUser = payload => ({ payload, type: ADD_NEW_USER });
 export const changeUserData = payload => ({ payload, type: CHANGE_USER_DATA });
 export const restoreDefaultUserData = () => ({ type: DEFAULT_USER_DATA });
+export const updateUser = payload => ({ payload, type: UPDATE_USER });
 
 /* thunk creators */
 
@@ -67,6 +69,18 @@ export const AddNewUserAPI = post => {
       await Axios.post('https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data', post);
       await new Promise((resolve) => resolve());
       dispatch(addNewUser(post));
+    } catch(err) {
+      dispatch(fetchError(err.message || false));
+    }
+  };
+};
+
+export const UpdateUserAPI = put => {
+  return async dispatch => {
+    try {
+      await Axios.put(`https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/${put.id}`, put);
+      await new Promise((resolve) => resolve());
+      dispatch(updateUser(put));
     } catch(err) {
       dispatch(fetchError(err.message || false));
     }
@@ -158,6 +172,22 @@ export default function reducer(statePart = [], action = {}) {
           name: '',
           email: '',
         },
+      };
+    }
+    case UPDATE_USER: {
+      return {
+        ...statePart,
+        usersList: statePart.usersList.map(user => {
+          if(user.id === action.payload.id) {
+            return {
+              ...user,
+              name: action.payload.name,
+              email: action.payload.email,
+            };
+          } else {
+            return user;
+          }
+        }),
       };
     }
     default:

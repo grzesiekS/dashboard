@@ -36,7 +36,7 @@ class UserForm extends React.Component {
   }
 
   async handleSubmit() {
-    const {selectedUser, id, AddNewUserAPI} = this.props;
+    const {selectedUser, id, AddNewUserAPI, UpdateUserAPI} = this.props;
 
 
     if(selectedUser.email === '' || selectedUser.name === '') {
@@ -46,7 +46,8 @@ class UserForm extends React.Component {
         await AddNewUserAPI(uid() ,selectedUser.email, selectedUser.name);
         this.handleRedirectChange();
       } else if (selectedUser.id.toString() === id) {
-        console.log('test');
+        UpdateUserAPI(selectedUser.id, selectedUser.email, selectedUser.name);
+        this.handleRedirectChange();
       }
     }  
   }
@@ -128,12 +129,14 @@ UserForm.propTypes = {
   loadingData: PropTypes.object,
   AddNewUserAPI: PropTypes.func,
   changeUserData: PropTypes.func,
+  UpdateUserAPI: PropTypes.func,
 };
 
 UserForm.defaultProps = {
   fetchUsersSelected: () => {},
   AddNewUserAPI: () => {},
   changeUserData: () => {},
+  UpdateUserAPI: () => {},
 };
 
 export default UserForm;
