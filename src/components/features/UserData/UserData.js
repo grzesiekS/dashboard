@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,12 @@ const UserData = ({userList, deleteUser}) => {
 
   const [promptWindowVisible, setVisible] = useState(false);
   const [id, setId] = useState(0);
+  const [arrayList, setArrayList] = useState([]);
+  const [sortUser, setSortUser] = useState(0);
+
+  useEffect(() => {
+    setArrayList(userList);
+  },[userList]);
 
   const handlePromptWindow = (id) => {
     setId(id);
@@ -24,7 +30,21 @@ const UserData = ({userList, deleteUser}) => {
     setVisible(false);
   };
 
+  const handleUsernameSort = () => {
+    if(sortUser === 0) {
+      setSortUser(1);
+      setArrayList(arrayList.sort((a, b) => (a.username > b.username) ? 1 : -1));
+    } else if(sortUser === 1) {
+      setSortUser(-1);
+      setArrayList(arrayList.sort((a, b) => (a.username < b.username) ? 1 : -1));
+    } else {
+      setSortUser(1);
+      setArrayList(arrayList.sort((a, b) => (a.username > b.username) ? 1 : -1));
+    }
+  };
+
   return (
+    
     <div>
       {
         promptWindowVisible 
@@ -45,13 +65,19 @@ const UserData = ({userList, deleteUser}) => {
               <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
-                <th scope="col">Username</th>
+                <th scope="col"><button 
+                  type='button' 
+                  className='btn btn-link'
+                  onClick={() => handleUsernameSort()}
+                >
+                    Username
+                </button></th>
                 <th scope="col">City</th>
                 <th scope="col">Email</th>
               </tr>
             </thead>
             <tbody>
-              {userList.map(user => (
+              {arrayList.map(user => (
                 <tr key={user.id}>
                   <th scope='row'>{user.id}</th>
                   <td>{user.name}</td>
