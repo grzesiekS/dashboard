@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const UserData = ({userList}) => (
+const UserData = ({userList, deleteUser}) => (
   <div>
     <table className='table'>
       <thead>
@@ -27,7 +27,15 @@ const UserData = ({userList}) => (
                 <button type='button' className='btn btn-warning'>Edit</button>
               </Link>
             </td>
-            <td><button type='button' className='btn btn-danger'>Delete</button></td>
+            <td>
+              <button 
+                type='button' 
+                className='btn btn-danger'
+                onClick={() => deleteUser(user.id)}
+              >
+                Delete
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>
@@ -37,6 +45,7 @@ const UserData = ({userList}) => (
 
 UserData.propTypes = {
   userList: PropTypes.array,
+  deleteUser: PropTypes.func,
 };
 
 export default UserData;
