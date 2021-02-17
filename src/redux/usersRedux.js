@@ -280,9 +280,12 @@ export default function reducer(statePart = [], action = {}) {
       };
     }
     case DELETE_SUCCESS: {
-      console.log(action);
       return {
         ...statePart,
+        delete: {
+          active: false,
+          error: false,
+        },
         usersList: statePart.usersList.filter(user => user.id !== action.payload),
       };
     }
