@@ -4,6 +4,8 @@ import Axios from 'axios';
 export const getUsersData = ({users}) => users.usersList === undefined ? [] : users.usersList;
 export const getSelectedUserData = ({users}) => users.userData === undefined ? {} : users.userData;
 export const getLoadingData = ({users}) => users.loading === undefined ? {} : users.loading;
+export const getSelectedUserLocal = ({users}, id) => users.usersList === undefined ? [] 
+  : users.usersList.filter(user => user.id.toString() === id)[0];
 
 /* ACTIONS */
 // action name creator
@@ -80,7 +82,6 @@ export const fetchUsersSelected = id => {
       })
       .catch(err => {
         dispatch(fetchError(err.message || true));
-        dispatch(restoreDefaultUserData());
       });
   };
 };
